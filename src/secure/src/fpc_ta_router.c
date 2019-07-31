@@ -54,7 +54,6 @@ extern fpc_ta_module_t fpc_ta_pn_module;
 #endif
 
 static fpc_ta_module_t* s_module_list[] = {
-     #ifdef FPC_CONFIG_LIB  //only debug for fpc_lib.
         &fpc_ta_common_module,
         #ifndef FPC_CONFIG_NO_SENSOR
         &fpc_ta_sensor_module,
@@ -63,7 +62,6 @@ static fpc_ta_module_t* s_module_list[] = {
         &fpc_ta_bio_module,
         #endif
         &fpc_ta_kpi_module,
-     #endif
         #ifdef FPC_CONFIG_NAVIGATION
         &fpc_ta_navigation_module,
         #endif

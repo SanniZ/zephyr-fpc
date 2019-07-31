@@ -1,7 +1,7 @@
 
 #include "fpc_types.h"
 #include "fpc_log.h"
-
+#include "fpc_build_info.h"
 
 #include "app_ipc.h"
 

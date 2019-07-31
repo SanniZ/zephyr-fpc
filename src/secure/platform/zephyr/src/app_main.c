@@ -66,7 +66,7 @@ int main(void) {
         LOGE("failed (%ld) to initialize fpc_fingerprint", rc);
         return rc;
     }
-	
+
     /* enter main event loop */
     while (true) {
         event.handle = 0;

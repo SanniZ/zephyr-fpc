@@ -10,6 +10,8 @@
 #ifndef INCLUSION_GUARD_FPC_TYPES
 #define INCLUSION_GUARD_FPC_TYPES
 
+#include <stdint.h>
+
 enum FPC_ERROR {
     FPC_ERROR_INPUT = 1,
     FPC_ERROR_TIMEDOUT = 2,
