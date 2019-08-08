@@ -45,7 +45,7 @@ int fpc_algo_load_configuration(
  * @param[in] context, previously initialized by fpc_algo_load_configuration.
  */
 void fpc_algo_cleanup(algo_context_t *context) {
-    return 0;
+    return;
 }
 
 /*

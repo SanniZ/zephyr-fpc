@@ -303,7 +303,7 @@ static int fpc_ta_pn_calibrate_finger_end(uint8_t        *encrypted_buffer,
         goto out;
     }
 
-    unencrypted_buffer = (uint8_t*)malloc(unencrypted_size + FPC_PN_MAGIC_LEN);
+    unencrypted_buffer = (uint8_t*)fpc_malloc(unencrypted_size + FPC_PN_MAGIC_LEN);
     if (!unencrypted_buffer) {
         ret = -FPC_PN_MEMORY;
         goto out;
@@ -333,7 +333,7 @@ static int fpc_ta_pn_calibrate_finger_end(uint8_t        *encrypted_buffer,
         }
     }
 
-    free(unencrypted_buffer);
+    fpc_free(unencrypted_buffer);
 
 out:
     LOG_LEAVE_TRACE(ret);
@@ -373,7 +373,7 @@ static int fpc_ta_pn_calibrate(uint8_t *encrypted_buffer, const uint32_t size)
     if (ret != FPC_RESULT_OK) {
         goto out;
     }
-    unencrypted_buffer = (uint8_t*)malloc(unencrypted_size + FPC_PN_MAGIC_LEN);
+    unencrypted_buffer = (uint8_t*)fpc_malloc(unencrypted_size + FPC_PN_MAGIC_LEN);
     if (!unencrypted_buffer) {
         ret = -FPC_PN_MEMORY;
         goto out;
@@ -404,7 +404,7 @@ static int fpc_ta_pn_calibrate(uint8_t *encrypted_buffer, const uint32_t size)
         ret = -FPC_PN_FAILED;
     }
 
-    free(unencrypted_buffer);
+    fpc_free(unencrypted_buffer);
 
 out:
     if (fpc_sensor_communication_stop()) {

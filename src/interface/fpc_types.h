@@ -10,7 +10,10 @@
 #ifndef INCLUSION_GUARD_FPC_TYPES
 #define INCLUSION_GUARD_FPC_TYPES
 
+#include <stdlib.h>
 #include <stdint.h>
+
+#include "fpc_mem.h"
 
 enum FPC_ERROR {
     FPC_ERROR_INPUT = 1,

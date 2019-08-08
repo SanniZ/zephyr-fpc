@@ -99,7 +99,8 @@ int fpc_ta_router_init()
         if (s_module_list[i]->init) {
             int status = s_module_list[i]->init();
             if (status) {
-                LOGE("%s Module %d.init failed: %x", __func__, i, status);
+                LOGE("%s() Module %d.init failed: %x\n",
+                        __func__, s_module_list[i]->key, status);
                 return status;
             }
         }

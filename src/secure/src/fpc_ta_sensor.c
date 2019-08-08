@@ -371,23 +371,23 @@ static int fpc_ta_sensor_init(void)
     fpc_ta_common_t *c_instance = fpc_common_get_handle();
 
     if (FAILED(fpc_sensor_communication_start())) {
-        LOGE("<--%s communication start failed.", __func__);
+        LOGE("<--%s communication start failed.\n", __func__);
         return -FPC_ERROR_RESET_HARDWARE;
     }
 
     status = fpc_device_init(NULL, &dev_context_size);
     if(FPC_RESULT_ERROR_MEMORY == status)
     {
-        _fpc_ta_sensor_context = (device_context_t*)malloc(dev_context_size);
+        _fpc_ta_sensor_context = (device_context_t*)fpc_malloc(dev_context_size);
         if (!_fpc_ta_sensor_context) {
-             LOGE("<--%s fail to malloc dev_context_size\n", __func__);
+             LOGE("<--%s fail to fpc_malloc dev_context_size\n", __func__);
              return -FPC_ERROR_ALLOC;
          }
         status = fpc_device_init(_fpc_ta_sensor_context, &dev_context_size);
     }
 
     if (FAILED(status)) {
-        LOGE("<--%s device init failed %d.", __func__, status);
+        LOGE("<--%s device init failed %d.\n", __func__, status);
         status = -FPC_ERROR_RESET_HARDWARE;
         goto out;
     }
@@ -407,7 +407,7 @@ static void fpc_ta_sensor_exit(void)
 {
     LOG_ENTER();
     fpc_device_deinit(_fpc_ta_sensor_context);
-    free(_fpc_ta_sensor_context);
+    fpc_free(_fpc_ta_sensor_context);
 
 }
 

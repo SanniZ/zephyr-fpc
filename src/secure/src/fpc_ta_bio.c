@@ -206,7 +206,7 @@ static int fpc_ta_bio_end_enrol(fpc_bio_t* bio, uint32_t* id)
     }
 
     tpl.size = bio->enroll_data.enrolled_template_size;
-    tpl.tpl = malloc(bio->enroll_data.enrolled_template_size);
+    tpl.tpl = fpc_malloc(bio->enroll_data.enrolled_template_size);
 
     if (tpl.tpl == NULL) {
         LOGE("No memory for template");
@@ -264,7 +264,7 @@ out:
     c_instance->check_for_bad_pixels = 1;
 
     if (!tpl_ownership_transferred) {
-        free(tpl.tpl);
+        fpc_free(tpl.tpl);
     }
 
     return status;
@@ -456,7 +456,7 @@ static int fpc_ta_bio_update_template(fpc_bio_t* bio, uint32_t* did_update)
                 return -FPC_ERROR_NOENTITY;
             }
 
-            uint8_t* tpl_item = (uint8_t *) malloc(bio->ident_data.updated_template_sizes[i]);
+            uint8_t* tpl_item = (uint8_t *) fpc_malloc(bio->ident_data.updated_template_sizes[i]);
             uint8_t* temp_tpl = updated_templates_list[i]->tpl;
             if (tpl_item == NULL) {
                 LOGE("%s: failed to realloc template buffer, keeping old template", __func__);
@@ -466,7 +466,7 @@ static int fpc_ta_bio_update_template(fpc_bio_t* bio, uint32_t* did_update)
             updated_templates_list[i]->size = bio->ident_data.updated_template_sizes[i];
             updated_templates_list[i]->tpl = tpl_item;
 
-            free(temp_tpl);
+            fpc_free(temp_tpl);
         }
         status = fpc_algo_update_templates(bio->algo_context,
                                            &updated_templates_list[0],
@@ -643,7 +643,7 @@ static int fpc_ta_bio_init(void)
 
     int status = fpc_db_create(&bio->user_db, NULL, 0);
     if (status) {
-        LOGE("%s fpc_db_create failed", __func__);
+        LOGE("%s fpc_db_create failed\n", __func__);
         return -FPC_ERROR_ALLOC;
     }
 
@@ -651,12 +651,12 @@ static int fpc_ta_bio_init(void)
     status = fpc_algo_load_configuration(NULL, &context_size);
 
     if(status == FPC_RESULT_ERROR_MEMORY) {
-        bio->algo_context = (algo_context_t*) malloc(context_size);
+        bio->algo_context = (algo_context_t*) fpc_malloc(context_size);
     }
 
     status = fpc_algo_load_configuration(bio->algo_context, &context_size);
     if (FAILED(status)) {
-        LOGE("%s: fpc_algo_load_configuration returned error: %d", __func__, status);
+        LOGE("%s: fpc_algo_load_configuration returned error: %d\n", __func__, status);
         return fpc_result_to_error(status);
     }
 
@@ -673,7 +673,7 @@ static void fpc_ta_bio_exit(void)
     fpc_bio_t* bio = &g_fpc_trusted_app_instance;
 
     fpc_algo_cleanup(bio->algo_context);
-    free(bio->algo_context);
+    fpc_free(bio->algo_context);
 
     int status = fpc_db_destroy(&bio->user_db);
     if (status) {

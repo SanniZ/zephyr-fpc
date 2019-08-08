@@ -311,7 +311,7 @@ static int fpc_ta_hw_auth_handler(void* buffer, uint32_t size_buffer)
 
 static int fpc_ta_hw_auth_init(void)
 {
-    LOGD("%s", __func__);
+    LOGD("%s\n", __func__);
     fpc_hw_auth_ta_t* hw_auth_ta = &g_hw_auth_ta;
 
     hw_auth_ta->bio = fpc_bio_get_handle();
