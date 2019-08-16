@@ -59,14 +59,13 @@ static int fpc_ta_common_init(void)
     LOG_ENTER();
     uint32_t size = fpc_common_get_info_size();
 
-    _fpc_common_buffer = fpc_malloc(size);
+    _fpc_common_buffer = malloc(size);
     if (!_fpc_common_buffer) {
-        LOGE("fpc_malloc buffer size %d fail!\n", size);
         return -FPC_ERROR_ALLOC;
     }
 
     if (fpc_common_init(_fpc_common_buffer, &size)) {
-        fpc_free(_fpc_common_buffer);
+        free(_fpc_common_buffer);
         _fpc_common_buffer = NULL;
         return -FPC_ERROR_ALLOC;
     }
@@ -74,9 +73,9 @@ static int fpc_ta_common_init(void)
     fpc_ta_common_t *c_instance = fpc_common_get_handle();
     size_t image_size = fpc_common_get_image_size();
 
-    void *buffer = fpc_malloc(image_size);
+    void *buffer = malloc(image_size);
     if (!buffer) {
-        fpc_free(_fpc_common_buffer);
+        free(_fpc_common_buffer);
         _fpc_common_buffer = NULL;
         return -FPC_ERROR_ALLOC;
     }
@@ -93,9 +92,9 @@ static int fpc_ta_common_init(void)
 static void fpc_ta_common_exit(void)
 {
 
-    fpc_free(_fpc_common_buffer);
+    free(_fpc_common_buffer);
     _fpc_common_buffer = NULL;
-    fpc_free(fpc_common_get_handle()->image);
+    free(fpc_common_get_handle()->image);
     fpc_common_get_handle()->image = NULL;
     LOG_LEAVE();
 

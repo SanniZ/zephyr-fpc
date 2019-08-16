@@ -28,7 +28,11 @@
  * @return -1 if build_info is NULL
  */
 int32_t fpc_get_build_info (fpc_build_info_t* build_info) {
-    build_info->info = "it is a dummy lib, please require from FPC vendor!";
+    build_info->id = "dummy build id v1.0.0.";
+	build_info->id_size = strlen(build_info->id);
+    build_info->info = "dummy build info for self test!";
     build_info->info_size = strlen(build_info->info);
+	build_info->type = "dummy build type for self test!";
+	build_info->type_size = strlen(build_info->type);
     return 0;
 }

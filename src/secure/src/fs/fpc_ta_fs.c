@@ -38,7 +38,7 @@ static int fpc_ta_load_db_from_file(fpc_bio_t* bio, const char* path)
         goto out;
     }
 
-    data = fpc_malloc(file_size);
+    data = malloc(file_size);
     if (!data) {
         status = -FPC_ERROR_ALLOC;
         goto out;
@@ -58,7 +58,7 @@ static int fpc_ta_load_db_from_file(fpc_bio_t* bio, const char* path)
     }
 
 out:
-    fpc_free(data);
+    free(data);
     return status;
 }
 
@@ -79,7 +79,7 @@ static int fpc_ta_store_db_to_file(fpc_bio_t* bio, const char* path)
         goto out;
     }
 
-    db_data = fpc_malloc(size_db);
+    db_data = malloc(size_db);
 
     if (!db_data) {
         status = -FPC_ERROR_ALLOC;
@@ -99,7 +99,7 @@ static int fpc_ta_store_db_to_file(fpc_bio_t* bio, const char* path)
     status = 0;
 
 out:
-    fpc_free(db_data);
+    free(db_data);
     return status;
 }
 

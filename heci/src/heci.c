@@ -12,6 +12,8 @@
 
 #include "heci.h"
 
+#include "heci_bridge.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -23,7 +25,7 @@ extern "C" {
  * @retval 0 If successful.
  */
 int heci_register(heci_client_t *client) {
-    return 0;
+    return heci_client_register(client);
 }
 
 /**
@@ -34,7 +36,8 @@ int heci_register(heci_client_t *client) {
  * @retval 0 If successful.
  */
 bool heci_send(uint32_t conn_id, mrd_t *msg) {
-    return 1;
+    heci_client_put((void *)msg->buf, msg->len);
+	return true;
 }
 
 /**
@@ -45,7 +48,7 @@ bool heci_send(uint32_t conn_id, mrd_t *msg) {
  * @retval 0 If successful.
  */
 bool heci_send_flow_control(uint32_t conn_id) {
-    return 1;
+    return heci_host_send_flow_control(conn_id);
 }
 
 /**

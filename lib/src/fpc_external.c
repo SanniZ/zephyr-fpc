@@ -15,7 +15,7 @@
  * @return required buffer size in bytes.
  */
 uint32_t fpc_common_get_info_size(void) {
-    return 64;
+    return 128;
 }
 
 /*

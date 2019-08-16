@@ -13,8 +13,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "fpc_mem.h"
-
 enum FPC_ERROR {
     FPC_ERROR_INPUT = 1,
     FPC_ERROR_TIMEDOUT = 2,
@@ -61,5 +59,7 @@ enum {
     FPC_PN_RETRY_CALIBRATION = 1002,
     FPC_PN_MEMORY = 1003,
 };
+
+typedef int status_t;
 
 #endif // INCLUSION_GUARD_FPC_TYPES

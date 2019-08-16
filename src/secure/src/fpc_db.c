@@ -74,7 +74,7 @@ struct FingerprintDatabase_s {
 static void *fpc_mem_calloc(size_t nmemb, size_t size)
 {
     size_t totalsize = nmemb * size;
-    void* ptr = fpc_malloc( totalsize );
+    void* ptr = malloc( totalsize );
 
     if (ptr == NULL) {
         return NULL;
@@ -154,17 +154,17 @@ static int db_free(FingerprintDatabase_t* db)
         for (int i = 0; i < FPC_DB_FINGERPRINTS_IN_SET; i++) {
             Fingerprint_t* finger = &(set->aFingerprintList[i]);
             if (finger->ftemplate.tpl != NULL) {
-                fpc_free(finger->ftemplate.tpl);
+                free(finger->ftemplate.tpl);
             }
             finger->ftemplate.tpl = NULL;
             finger->ftemplate.size = 0;
         }
 
-        fpc_free(set);
+        free(set);
         db->pFingerprintSet = NULL;
     }
 
-    fpc_free(db);
+    free(db);
 
     return 0;
 }
@@ -668,7 +668,7 @@ int fpc_db_delete_set(FingerprintDatabase_t *pDb,
         finger->valid = FPC_DB_ENTRY_INVALID;
         if (finger->ftemplate.tpl != NULL) {
             memset(finger->ftemplate.tpl, 0xCC, finger->ftemplate.size);
-            fpc_free(finger->ftemplate.tpl);
+            free(finger->ftemplate.tpl);
         }
         finger->ftemplate.tpl = NULL;
         finger->ftemplate.size = 0;
@@ -676,7 +676,7 @@ int fpc_db_delete_set(FingerprintDatabase_t *pDb,
     }
 
     memset(set, 0xCC, sizeof(FingerprintSet_t));
-    fpc_free(set);
+    free(set);
     pDb->pFingerprintSet = NULL;
 
     return 0;
@@ -983,7 +983,7 @@ int fpc_db_add_fingerprint(FingerprintDatabase_t *pDb,
         }
         set->fingerprintSetKey = fingerprintSetKey;
         if (db_generate_unique_id(&(set->fingerprintSetId))) {
-            fpc_free(set);
+            free(set);
             return -FPC_ERROR_IO;
         }
         for (int i = 0; i < FPC_DB_FINGERPRINTS_IN_SET; i++) {
@@ -992,7 +992,7 @@ int fpc_db_add_fingerprint(FingerprintDatabase_t *pDb,
 
         int result = db_add_set(pDb, set);
         if (result != 0) {
-            fpc_free(set);
+            free(set);
             return result;
         }
     }
@@ -1065,7 +1065,7 @@ int fpc_db_delete_fingerprint(FingerprintDatabase_t *pDb,
 
     if (finger->ftemplate.tpl != NULL) {
         memset(finger->ftemplate.tpl, 0xCC, finger->ftemplate.size);
-        fpc_free(finger->ftemplate.tpl);
+        free(finger->ftemplate.tpl);
     }
 
     finger->ftemplate.tpl = NULL;

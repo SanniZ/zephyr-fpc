@@ -53,14 +53,17 @@ void fpc_debug_circular_log(char* format, ...);
   #endif
 #else
   #include <sys/printk.h>
-  #define LOGD(...)  printk(__VA_ARGS__)
+  #ifndef LOG_TAG
+    #define LOG_TAG "fpc_ta"
+  #endif
+  #define LOGD(f, ...)  printk("["LOG_TAG"] "f"\n", ##__VA_ARGS__)
   #define LOGD_STR(...)
-  #define LOGE(...)  printk(__VA_ARGS__)
+  #define LOGE(f, ...)  printk("["LOG_TAG"] "f"\n", ##__VA_ARGS__)
   #define LOGE_STR(__str)
-  #define LOGI(...)  printk(__VA_ARGS__)
-  #define LOGS(...)
-  #define LOG_ENTER()
-  #define LOG_LEAVE()
+  #define LOGI(f, ...)  printk("["LOG_TAG"] "f"\n", ##__VA_ARGS__)
+  #define LOGS(f, ...)
+  #define LOG_ENTER()   printk("["LOG_TAG"] %s enter\n", __func__)
+  #define LOG_LEAVE()   printk("["LOG_TAG"] %s leave\n", __func__)
   #define LOG_LEAVE_TRACE(ret)
 #endif
 

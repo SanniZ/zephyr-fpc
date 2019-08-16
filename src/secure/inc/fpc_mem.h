@@ -11,10 +11,8 @@
 #include <stdlib.h>
 
 void fpc_get_timestamp(uint64_t* time);
-void fpc_memset(void *s,int ch,size_t n);
-void* fpc_memcpy(void* destination, const void* source, size_t num );
-void* fpc_malloc(size_t size);
-void* fpc_calloc(size_t nmemb, size_t size);
-void fpc_free(void* mem);
+void* memcpy(void* destination, const void* source, size_t num );
+void* malloc(size_t size);
+void free(void* mem);
 void fpc_free(void* mem);
 #endif

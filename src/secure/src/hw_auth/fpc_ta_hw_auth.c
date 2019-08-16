@@ -111,7 +111,6 @@ static int validate_incoming_token(fpc_hw_auth_ta_t* ta)
     return fpc_check_token_integrity(&ta->incoming_token);
 }
 
-#ifdef FPC_CONFIG_HW_AUTH
 int fpc_enrollment_allowed(fpc_bio_t* bio, uint64_t* user)
 {
     (void)bio; //Unused
@@ -125,7 +124,6 @@ int fpc_enrollment_allowed(fpc_bio_t* bio, uint64_t* user)
     *user = g_hw_auth_ta.incoming_token.user_id;
     return 1;
 }
-#endif
 
 static int get_enrol_challenge(fpc_hw_auth_ta_t* ta,
                                        uint64_t* challenge)
@@ -311,7 +309,7 @@ static int fpc_ta_hw_auth_handler(void* buffer, uint32_t size_buffer)
 
 static int fpc_ta_hw_auth_init(void)
 {
-    LOGD("%s\n", __func__);
+    LOGD("%s", __func__);
     fpc_hw_auth_ta_t* hw_auth_ta = &g_hw_auth_ta;
 
     hw_auth_ta->bio = fpc_bio_get_handle();

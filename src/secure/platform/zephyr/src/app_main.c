@@ -1,19 +1,20 @@
+
+#define LOG_TAG "app_main"
+
 #include <zephyr.h>
 #include <sys/printk.h>
+#include <string.h>
 
 #include "fpc_types.h"
 #include "fpc_log.h"
 #include "fpc_ta_router.h"
 
+#include "app_main.h"
+
 #include "heci.h"
 
-//#define CONFIG_FP_USES_THREAD_FOR_HECI
 
-#define HECI_CLIENT_FP_GUID	{ 0xa3411200, 0xb4da, 0x4d1c, \
-		              { 0xa9, 0x04, 0x20, 0x88, 0x2d, 0xc3, 0xef, 0xea }}
-
-#define RX_MAX_SIZE        4096
-#define STACK_MAX_SIZE     1600
+#define CONFIG_FP_USES_THREAD_FOR_HECI
 
 static uint32_t conn_id;
 
@@ -35,23 +36,26 @@ static k_tid_t thread_using_heci[] = {&heci_thread};
 /*
   *  send response to host.
   */
-static int send_response(uint8_t *buffer, size_t size, int32_t rsp) {
-    mrd_t msg = {0};
+static int send_response(uint8_t *buffer, size_t size) {
+	mrd_t msg = {0};
 
-    msg.buf = buffer;
+	msg.buf = buffer;
 	msg.len = size;
-    return heci_send(conn_id, &msg);
+	return heci_send(conn_id, &msg);
 }
 
 /*
   *  process msg and send response.
   */
 static void process_msg(uint8_t *buffer, size_t size) {
-	void *buf = (void *)tx_buffer;
+	uint8_t *buf = tx_buffer;
+	int32_t *response = (int32_t *)(buf + size);
 
-	fpc_memset(buf, 0, RX_MAX_SIZE);
-	fpc_memcpy(buf, (void *)buffer, size);
-	send_response(buf, size, fpc_ta_route_command(buf, size));
+	memset((void *)buf, 0, RX_MAX_SIZE);
+	memcpy((void *)buf, (void *)buffer, size);
+
+	*response = fpc_ta_route_command(buf, size);
+	send_response(buf, size + sizeof(int32_t));
 }
 
 /*
@@ -95,9 +99,9 @@ static void dispatch_event(uint32_t event) {
   *  waitting for event from heci.
   */
 int wait_any(uint32_t *event, uint32_t timeout_msecs) {
-    int rc = k_sem_take(&rx_event_sem, timeout_msecs);
-    *event = rx_event;
-    return rc;
+	int rc = k_sem_take(&rx_event_sem, timeout_msecs);
+	*event = rx_event;
+	return rc;
 }
 
 /*
@@ -105,21 +109,18 @@ int wait_any(uint32_t *event, uint32_t timeout_msecs) {
   */
 static void loop_task(void *p1, void *p2, void *p3) {
 	uint32_t event = 0;
-    int rc;
 
-    /* enter main event loop */
+    /* event loop */
     while (true) {
-		rc = wait_any(&event, K_FOREVER);
-        if (rc < 0) {
-            LOGE("%s() wait_any failed (%d)\n", __func__, rc);
+        if (wait_any(&event, K_FOREVER) < 0) {
+            LOGE("%s(): wait_any fail\n", __func__);
             break;
         }
-		/* run route init. */
-		rc = fpc_ta_router_init();
-        if (rc) {
-            LOGE("%s() route init failed %d\n", __func__, rc);
-            break;
-        }
+		/* route init. */
+	    if (fpc_ta_router_init()) {
+	        LOGE("%s() route init failed\n", __func__);
+	        return;
+	    }
 		/* dispatch event*/
         dispatch_event(event);
     }
@@ -171,7 +172,6 @@ static int heci_client_init(void) {
 }
 
 
-
 int main(void) {
 	int rc;
 
@@ -188,7 +188,6 @@ int main(void) {
 	loop_task(NULL, NULL, NULL);
 #endif
 
-    LOGD("%s() exit!\n", __func__);
     return 0;
 }
 

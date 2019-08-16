@@ -58,7 +58,7 @@ static struct
 
 static int fpc_ta_db_close(void)
 {
-    fpc_free(transfer.data);
+    free(transfer.data);
     memset(&transfer, 0, sizeof(transfer));
     transfer.mode = -1;
     return 0;
@@ -111,7 +111,7 @@ static int fpc_ta_db_open(fpc_bio_t* bio, uint32_t mode, uint32_t size)
 
         // Write mode implies REE will write encrypted database to TEE.
         case FPC_TA_BIO_DB_WRONLY: {
-            transfer.data = fpc_malloc(size);
+            transfer.data = malloc(size);
             if (!transfer.data) {
                 LOGE("%s Allocation (1) failed", __func__);
                 return -FPC_ERROR_ALLOC;
@@ -136,7 +136,7 @@ static int fpc_ta_db_open(fpc_bio_t* bio, uint32_t mode, uint32_t size)
             }
 
             // Allocate memory for unwrapped data
-            unwrapped_data = fpc_malloc(unwrapped_data_size);
+            unwrapped_data = malloc(unwrapped_data_size);
             if (!unwrapped_data) {
                 LOGE("%s Allocation (2) failed", __func__);
                 result = -FPC_ERROR_ALLOC;
@@ -146,7 +146,7 @@ static int fpc_ta_db_open(fpc_bio_t* bio, uint32_t mode, uint32_t size)
             // Allocate memory for the wrapped data
             transfer.size        = fpc_get_wrapped_size(unwrapped_data_size);
             transfer.data_offset = 0;
-            transfer.data        = fpc_malloc(transfer.size);
+            transfer.data        = malloc(transfer.size);
 
             if (!transfer.data) {
                 LOGE("%s Allocation (3) failed", __func__);
@@ -192,7 +192,7 @@ static int fpc_ta_db_open(fpc_bio_t* bio, uint32_t mode, uint32_t size)
 
 out:
     if (unwrapped_data) {
-        fpc_free(unwrapped_data);
+        free(unwrapped_data);
         unwrapped_data = NULL;
     }
 
