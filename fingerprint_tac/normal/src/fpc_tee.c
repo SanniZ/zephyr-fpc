@@ -32,7 +32,7 @@ typedef struct fpc_tee fpc_tee_t;
 fpc_tee_t* fpc_tee_init()
 {
     fpc_tee_t* tee = malloc(sizeof(fpc_tee_t));
-	
+
     if (!tee) {
         return NULL;
     }
