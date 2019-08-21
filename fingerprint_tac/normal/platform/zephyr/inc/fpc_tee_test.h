@@ -2,5 +2,6 @@
 #define __FPC_TEE_TEST_H__
 
 int fpc_tee_test_task(void);
+void fpc_create_test_task(void);
 
 #endif

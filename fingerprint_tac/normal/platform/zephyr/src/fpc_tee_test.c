@@ -23,9 +23,8 @@
 #define print_tee_test_result() \
             LOGI("Test result:\n%s", test_result);
 
-int fpc_tee_test_task(void) {
+static void fpc_tee_test_task(void *p1, void *p2, void *p3) {
     LOG_ENTER();
-
     fpc_tee_t* tee = fpc_tee_init();
     //fpc_tee_bio_t* bio = fpc_tee_bio_init(tee);
 
@@ -38,11 +37,16 @@ int fpc_tee_test_task(void) {
 
     //fpc_tee_bio_release(bio);
     fpc_tee_release(tee);
-
-    return 0;
 }
 
-K_THREAD_DEFINE(fpc_tee_test, STACK_MAX_SIZE, 
-	        fpc_tee_test_task, NULL, NULL, NULL,
-	        K_PRIO_PREEMPT(11), 0, 3000);
+static K_THREAD_STACK_DEFINE(tee_test_stack, STACK_MAX_SIZE);
+static struct k_thread tee_test_thread;
+
+void fpc_create_test_task(void) {
+    k_thread_create(&tee_test_thread, tee_test_stack, STACK_MAX_SIZE,
+                    fpc_tee_test_task, NULL, NULL, NULL, K_PRIO_PREEMPT(11), 0, 0);
+}
+//K_THREAD_DEFINE(fpc_tee_test, STACK_MAX_SIZE, 
+//                fpc_tee_test_task, NULL, NULL, NULL,
+//                K_PRIO_PREEMPT(11), 0, 3000);
 
