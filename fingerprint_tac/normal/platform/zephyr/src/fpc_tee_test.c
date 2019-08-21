@@ -15,15 +15,13 @@
 
 #define setup_tee_test() \
             char test_result[1024] = {0}; \
-            char *result_ptr = test_result; \
-            char temp_buf[64]
+            char *result_ptr = test_result;
 #define run_tee_test_case(name, rc) \
-            memset(temp_buf, 0, sizeof(temp_buf)); \
-            sprintf(temp_buf, "[%7s] %s\n", rc ? "FAIL": "SUCCESS", name); \
-            memcpy(result_ptr, temp_buf, strlen(temp_buf)); \
-            result_ptr += strlen(temp_buf)
+            rc ? sprintf(result_ptr, "[FAIL] %s\n", name): \
+                 sprintf(result_ptr, "[ OK ] %s\n", name); \
+            result_ptr = test_result + strlen(result_ptr);
 #define print_tee_test_result() \
-            LOGI("Test result:\n%s", test_result)
+            LOGI("Test result:\n%s", test_result);
 
 int fpc_tee_test_task(void) {
     LOG_ENTER();
