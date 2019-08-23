@@ -8,7 +8,7 @@
 #include "fpc_log.h"
 #include "fpc_mem.h"
 
-#include "app_main.h"
+#include "fpc_service.h"
 #include "heci.h"
 
 static heci_client_t heci_client;

@@ -1,5 +1,8 @@
 
-#define LOG_TAG "app_main"
+#define LOG_TAG "fpc_service"
+
+#include <init.h>
+#include <device.h>
 
 #include <zephyr.h>
 #include <sys/printk.h>
@@ -9,7 +12,7 @@
 #include "fpc_log.h"
 #include "fpc_ta_router.h"
 
-#include "app_main.h"
+#include "fpc_service.h"
 
 #include "heci.h"
 
@@ -165,7 +168,7 @@ static int heci_client_init(void) {
 #include "fpc_tee_test.h"
 #include "heci_bridge.h"
 
-int main(void)
+int fpc_service_start(struct device *unused)
 {
     if (heci_client_init()) {
         LOGE("%s() failed at client initialize\n", __func__);
@@ -181,4 +184,4 @@ int main(void)
     return 0;
 }
 
-//SYS_INIT(main, POST_KERNEL, 90);
+SYS_INIT(fpc_service_start, POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEVICE);

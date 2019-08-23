@@ -41,12 +41,12 @@ aux_source_directory(${SRC_DIR}/secure/src/db_blob app_sources)
 endif()
 # add dummy heci, lib and fingerprint_tac.
 include(${PROJECT_SOURCE_DIR}/heci/CMakeLists.txt)
-include(${PROJECT_SOURCE_DIR}/lib/CMakeLists.txt)
+#include(${PROJECT_SOURCE_DIR}/lib/CMakeLists.txt)
 include(${PROJECT_SOURCE_DIR}/fingerprint_tac/CMakeLists.txt)
 # build source.
 target_sources(app PRIVATE ${app_sources})
 
 # link to staic lib.
-# add_library(lib STATIC IMPORTED)
-# set_property(TARGET lib PROPERTY IMPORTED_LOCATION ${SRC_DIR}/secure/lib/${lib_name})
-# target_link_libraries(app PUBLIC lib)
+add_library(lib STATIC IMPORTED)
+set_property(TARGET lib PROPERTY IMPORTED_LOCATION ${SRC_DIR}/secure/lib/${lib_name})
+target_link_libraries(app PUBLIC lib)

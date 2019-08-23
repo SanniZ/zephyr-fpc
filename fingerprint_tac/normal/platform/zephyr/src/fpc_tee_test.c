@@ -11,7 +11,7 @@
 #include "fpc_tee_bio.h"
 #include "fpc_tee_db_blob_test.h"
 
-#include "app_main.h"
+#include "fpc_service.h"
 
 #define setup_tee_test() \
             char test_result[1024] = {0}; \
